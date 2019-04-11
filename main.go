@@ -1,59 +1,30 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
-const url string = "http://www.zhenai.com/zhenghun"
-
+//const url string = "http://www.zhenai.com/zhenghun"
 func main() {
-	response, err := http.Get(url)
+	response, err := http.Get("http://www.zhenai.com/zhenghun")
 	if err != nil {
-		log.Println(err)
+		panic(err)
 	}
+	defer response.Body.Close()
 
+	// 包含头部信息
+	//httputil.DumpResponse()
 	if response.StatusCode != http.StatusOK {
-		panic("http respose error")
+		fmt.Println("Error: status code", response.StatusCode)
+		return
 	}
 
-	body := response.Body
-	log.Printf("%s", body)
+	all, err := ioutil.ReadAll(response.Body)
+	if err != nil  {
+		panic(err)
+	}
+	fmt.Printf("%s\n", all)
 
-	//HTTP.get(url)
-	//re
-	//css选择器
-	//xpath
-	//
-	//转码
-	//return contents
-	//
-	//// 解析器解析
-	//return parseResult{
-	//request
-	//parseFunc
-	//item
-	//}
-	//
-	//// 循环解析结果
-	//for result in range parseResult {
-	//// requests ，不断推送给fatcher
-	//urls{
-	//url
-	//parseFunc
-	//}
-	//
-	//// item
-	//log.printf()
-	//}
-	//
-	//// main文件：
-	//url-》fatcher=〉解析-》url，开始第一步
-	//request       reqeust     item
-	//engine -〉 schedule -> worker  -> engine
-	//各自功能：
-	//engine：启动？
-	//schedule：接受request，发送request？
-	//worker：fatch，parse
-	//如何衔接：？？？
 }
